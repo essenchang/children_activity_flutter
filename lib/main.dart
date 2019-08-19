@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:children_activity_flutter/cld_act_data.dart';
+import 'package:children_activity_flutter/data_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:children_activity_flutter/zoo_data.dart';
 
 void main() => runApp(MyApp());
 
@@ -51,8 +51,6 @@ class StoreListPage extends StatefulWidget {
 }
 
 class _StoreListPageState extends State<StoreListPage> {
-  cld_act_data data;
-  //ZooData zooData;
   bool isShowList = false;
 
   @override
@@ -84,6 +82,7 @@ class _StoreListPageState extends State<StoreListPage> {
   }
 
   GridView _getCardView() {
+    cld_act_data data = DataMgr.instance.getData();
     if (data == null) {
       print('_getCardView zooDat == null');
 
@@ -102,7 +101,7 @@ class _StoreListPageState extends State<StoreListPage> {
   }
 
   Widget _getCardItem(context, index) {
-    Datas item = data.datas[index];
+    Datas item = DataMgr.instance.getData().datas[index];
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
@@ -154,6 +153,7 @@ class _StoreListPageState extends State<StoreListPage> {
   ListView _getListView() {
     print('_getListView');
 
+    cld_act_data data = DataMgr.instance.getData();
     if (data == null) {
       print('_getListView zooDat == null');
 
@@ -173,7 +173,7 @@ class _StoreListPageState extends State<StoreListPage> {
   }
 
   Widget _getListItem(context, index) {
-    Datas item = data.datas[index];
+    Datas item = DataMgr.instance.getData().datas[index];
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -238,9 +238,8 @@ class _StoreListPageState extends State<StoreListPage> {
     //zooData = ZooData.fromJson(json.decode(result));
     print('before setState');
     setState(() {
-      data = cld_act_data.fromJson(json.decode(result));
-//      data.datas =
-//      zooData = ZooData.fromJson(json.decode(result));
+      cld_act_data data = cld_act_data.fromJson(json.decode(result));
+      DataMgr.instance.setData(data);
 
       print('in setState');
     });
